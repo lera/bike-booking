@@ -1,0 +1,34 @@
+
+
+/users/                             list of all users
+/users/:userid                      data of a single user
+/users/:userid/bookings/            list of bookings for a user (show special date format)
+/users/:userid/bookings/:range/     list of all bookings of a user in a defined time range
+/users/:userid/bikes/               list of all bikes the user owns
+
+/bikes/                             list of all bikes
+/bikes/:bikeId                      data of a single bike
+/bikes/:bikeId/bookings/            list of all bookings of a bike
+/bikes/:bikeId/bookings/:range/     list of all bookings of a bike in a defined time range
+
+/bookings/:bookingId                data of a single booking
+/bookings/:range/
+
+
+Tables:
+1. Users (id, name, surname, address)
+2. Bikes (id, user_id, name)
+3. Bookings (id, bike_id, user_id, time_range_from, time_range_to)
+
+
+MySQL Commands:
+
+Change the column name - ALTER TABLE `Users` CHANGE `Adress` `Address` VARCHAR(255) NOT NULL
+
+CREATE TABLE Bikes (id int NOT NULL AUTO_INCREMENT, user_id int NOT NULL, name varchar(255), PRIMARY KEY (id), FOREIGN KEY (user_id) REFERENCES Users(id))
+
+Rename - ALTER TABLE BikeOwners RENAME Users;
+
+get date in special format - SELECT DATE_FORMAT(time_range_from, '%d/%m/%y') FROM Bookings
+
+get date in range - SELECT * FROM Bookings WHERE time_range_from <= '2017-04-31'
