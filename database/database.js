@@ -1,5 +1,7 @@
 const Q = require('q');
 const mysql = require('mysql');
+const uuidV4 = require('uuid/v4');
+var SHA512 = require("crypto-js/sha512");
 
 const settings = {
     table_users: 'Users',
@@ -83,14 +85,26 @@ const getBookingsByRange = function (rangeFrom, rangeTo){
 }
 
 const checkAuth = function (email, password){
-    return query(`SELECT token FROM ${settings.table_auth} WHERE email = ? AND password = ?`, [email, password]).then(single);
+    return query(`SELECT token FROM ${settings.table_auth} WHERE email = ? AND password = ?`, [email, SHA512(password).toString()]).then(single);
 };
 
 const checkAuthByToken = function (token){
     return query(`SELECT user_id FROM ${settings.table_auth} WHERE token = ?`, [token]).then(single);
 };
 
+const postUser = function (name, surname, address, email, password){
+    return query(`INSERT INTO ${settings.table_users} (name, surname, address) VALUES (?, ?, ?)`, [name, surname, address])
+        .then(() => query(`INSERT INTO ${settings.table_auth} (user_id, email, password, token) VALUES (LAST_INSERT_ID(), ?, ?, ?)`, [email, SHA512(password).toString(), uuidV4()]));
+};
 
+const postBike = function (id, name){
+    return query(`INSERT INTO ${settings.table_bikes} (user_id, name) VALUES (?, ?)`, [id, name]);
+};
+
+const postBooking = function (user_id, name, dateFrom, dateTill){    
+    return query(`SELECT id FROM ${settings.table_bikes} WHERE name = ?`, [name]).then(single)
+        .then((result) => query(`INSERT INTO ${settings.table_bookings} (user_id, bike_id, time_range_from, time_range_to) VALUES (?, ?, ?, ?)`, [user_id, result.id, dateFrom, dateTill]));
+};
 
 module.exports = {
     getUser: getUser,
@@ -103,5 +117,9 @@ module.exports = {
     getBookings: getBookings,
     getBookingsByRange: getBookingsByRange,
     checkAuth: checkAuth,
-    checkAuthByToken: checkAuthByToken
+    checkAuthByToken: checkAuthByToken,
+    postUser: postUser,
+    postBike: postBike,
+    postBooking: postBooking
 };
+	

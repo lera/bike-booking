@@ -9,7 +9,8 @@ module.exports = {
        filename: "bundle.js",
        sourceMapFilename: '[file].map',
        devtoolLineToLine: true
-    },
+    }/*
+,
     module: {
         loaders: [
             {
@@ -22,4 +23,5 @@ module.exports = {
             }
         ]
     }
+*/
 };

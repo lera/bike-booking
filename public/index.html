@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+    	#login, #addUser, #addBike {
+        	padding: 20px;
+        	border: 1px solid black;
+    	}
+	</style>
+</head>
+<body>
+    
+    <form id="login">
+        <input type="text" id="email" placeholder="email">
+        <input type="password" id="password" placeholder="password">
+        <input type="submit" value="login">
+        <input type="reset" value="Reset">
+    </form>
+    <br>
+    <br>
+    <form id="logout">
+        <input type="submit" value="logout">
+    </form>
+    <br>
+    <br>
+    <form id="addUser">
+        <input type="text" id="name" placeholder="name">
+        <input type="text" id="surname" placeholder="surname">
+        <input type="text" id="address" placeholder="address">
+        <input type="text" id="newEmail" placeholder="email">
+        <input type="password" id="newPassword" placeholder="password">
+        <input type="submit" value="register">
+        <input type="reset" value="Reset">
+    </form>
+    
+    <h2>Add bicycle</h2>
+    <form id="addBike">
+        <input type="text" id="bikeName" placeholder="bike's name">
+        <input type="submit" value="add">
+        
+        <p id="message"></p>
+    </form>
+    
+    <h2>Book bicycle</h2>
+    <form id="bookBike">
+        <input type="text" id="bike" placeholder="bike's name">
+        <input type="date" id="dateFrom" min=''>
+        <input type="date" id="dateTill" max='']>
+        <input type="submit" value="book">
+        <input type="reset" value="Reset">
+    </form>
+    
+	<script src="http://localhost:8080/bundle.js"></script>
+</body>
+</html>

@@ -6,6 +6,7 @@ module.exports = function (req, res){
         .then(function (data) {
             res.cookie('auth', data.token, {httpOnly: true});
             res.send({
+                
             });
         })
         .fail(function (error) {
