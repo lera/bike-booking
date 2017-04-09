@@ -85,7 +85,7 @@ const getBookingsByRange = function (rangeFrom, rangeTo){
 }
 
 const checkAuth = function (email, password){
-    return query(`SELECT token FROM ${settings.table_auth} WHERE email = ? AND password = ?`, [email, SHA512(password).toString()]).then(single);
+    return query(`SELECT user_id, token FROM ${settings.table_auth} WHERE email = ? AND password = ?`, [email, SHA512(password).toString()]).then(single);
 };
 
 const checkAuthByToken = function (token){
@@ -103,7 +103,45 @@ const postBike = function (id, name){
 
 const postBooking = function (user_id, name, dateFrom, dateTill){    
     return query(`SELECT id FROM ${settings.table_bikes} WHERE name = ?`, [name]).then(single)
-        .then((result) => query(`INSERT INTO ${settings.table_bookings} (user_id, bike_id, time_range_from, time_range_to) VALUES (?, ?, ?, ?)`, [user_id, result.id, dateFrom, dateTill]));
+        .then(result => query(`INSERT INTO ${settings.table_bookings} (user_id, bike_id, time_range_from, time_range_to) VALUES (?, ?, ?, ?)`, [user_id, result.id, dateFrom, dateTill]));
+};
+
+const deleteBooking = function (user_id, booking_id){
+    return query(`SELECT user_id FROM ${settings.table_bookings} WHERE id = ?`, [booking_id]).then(single)
+        .then(result => {
+            if (result.user_id === user_id){
+                return query(`DELETE FROM ${settings.table_bookings} WHERE id = ?`, [booking_id]).then(result => console.log('result delete', result));
+            } else {
+                return Q.reject({
+                    type: 'forbidden'
+                });
+            }
+        });
+};
+
+const getBookingsByIDByRange = function(id, rangeFrom, rangeTo){
+    return query(`SELECT * FROM ${settings.table_bookings} WHERE bike_id = ? AND time_range_from = ? AND time_range_to = ?`, [id, rangeFrom, rangeTo]);
+};
+
+/*
+const getAvailableBikes = function (rangeFrom, rangeTo){
+    return query(`SELECT id FROM ${settings.table_bikes}`)
+        .then(bikes => {
+            var bookingsOfBikes = bikes.map(bike => getBookingsByIDByRange(bike.id, rangeFrom, rangeTo)));
+            
+            return when.all(bookingsOfBikes)
+                .then(bookings => {
+                    
+                    return bikes.filter((bike, i) => {
+                        return bookings[i].length === 0;
+                    })
+                });
+        });
+};
+*/
+
+const getAvailableBikes = function (rangeFrom, rangeTo){
+    return query(`SELECT * FROM ${settings.table_bikes} WHERE id != ALL (SELECT bike_id FROM ${settings.table_bookings} WHERE time_range_from <= ? AND time_range_to >= ?)`, [rangeTo, rangeFrom])
 };
 
 module.exports = {
@@ -120,6 +158,9 @@ module.exports = {
     checkAuthByToken: checkAuthByToken,
     postUser: postUser,
     postBike: postBike,
-    postBooking: postBooking
+    postBooking: postBooking,
+    deleteBooking: deleteBooking,
+    getBookingsByIDByRange: getBookingsByIDByRange,
+    getAvailableBikes: getAvailableBikes
 };
 	

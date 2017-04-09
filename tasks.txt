@@ -32,3 +32,15 @@ Rename - ALTER TABLE BikeOwners RENAME Users;
 get date in special format - SELECT DATE_FORMAT(time_range_from, '%d/%m/%y') FROM Bookings
 
 get date in range - SELECT * FROM Bookings WHERE time_range_from <= '2017-04-31'
+
+JOIN columns 
+
+SELECT Bikes.id, Bookings.time_range_from, Bookings.time_range_to 
+FROM Bikes
+INNER JOIN Bookings ON Bikes.id=Bookings.bike_id
+
+Select only not booked bikes 
+
+SELECT * FROM Bikes
+WHERE id != (SELECT bike_id FROM Bookings WHERE time_range_from <= '2017-05-05' 
+AND time_range_to >= '2017-05-01' LIMIT 1)

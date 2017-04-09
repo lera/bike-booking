@@ -18,16 +18,18 @@ module.exports = function () {
     app.post('/users/', require('./routes/users'));
 
     app.get('/users/:id/bookings/', require('./routes/user-booking'));
-
+    
     app.get('/users/:id/bikes/', require('./routes/user-bikes'));
     
     app.post('/bikes/', require('./routes/bikes'));
 
     app.get('/bikes/:id(\\d+)?', require('./routes/bikes'));
 
-    app.get('/bikes/:id/bookings/', require('./routes/bike-bookings'));
+    app.get('/bikes/bookings/:fromTo', require('./routes/bike-bookings'));
 
     app.get('/bookings/:id(\\d+)/', require('./routes/bookings'));
+    
+    app.delete('/bookings/:id(\\d+)/', require('./routes/bookings'));
     
     app.post('/bookings/', require('./routes/bookings'));
 

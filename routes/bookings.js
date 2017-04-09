@@ -12,7 +12,7 @@ module.exports = function (req, res) {
                     res.send(error);
                 }); 
         } else if (req.params.from && req.params.to) {
-            db.getBookingsByRange(req.params.from, req.params.to)
+            db.getBookingsByRange(req.body.dateFrom, req.body.dateTill)
                 .then(function (data) {
                     res.send(data);
                 })
@@ -26,6 +26,17 @@ module.exports = function (req, res) {
             .then(function (data) {
                 res.send({ 
                     text: 'succes'
+                });
+            })
+            .fail(function (error) {
+                res.status(500);
+                res.send(error);
+            }); 
+    } else if (req.method === 'DELETE'){
+        db.deleteBooking(req.user_id, parseInt(req.params.id))
+            .then(function (data) {
+                res.send({ 
+                    text: 'deleted'
                 });
             })
             .fail(function (error) {

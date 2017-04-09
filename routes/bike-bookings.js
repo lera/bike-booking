@@ -18,14 +18,18 @@ module.exports = function (req, res) {
                 res.status(500);
                 res.send(error);
             });
-    } else if (req.params.from && req.params.to) {
-        db.getBikesBookingsByRange(req.params.from, req.params.to)
+    } else if (req.params.fromTo) {
+        var dateFrom = req.params.fromTo.split(',')[0];
+        var dateTo = req.params.fromTo.split(',')[1];
+        
+        db.getAvailableBikes(dateFrom, dateTo)
             .then(function (data) {
+                
                 res.send(data);
             })
             .fail(function (error) {
                 res.status(500);
                 res.send(error);
-            });
+            }); 
     }
 };

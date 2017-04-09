@@ -4,17 +4,23 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<style>
-    	#login, #addUser, #addBike {
+    	#login, #addUser, #addBike, #getBikes {
         	padding: 20px;
         	border: 1px solid black;
+    	}
+    	.blue {
+        	color: blue;
+    	}
+    	.bike:hover {
+        	cursor: pointer;
     	}
 	</style>
 </head>
 <body>
     
     <form id="login">
-        <input type="text" id="email" placeholder="email">
-        <input type="password" id="password" placeholder="password">
+        <input type="text" id="email" placeholder="email" value="c@c.c">
+        <input type="password" id="password" placeholder="password" value="Hanna">
         <input type="submit" value="login">
         <input type="reset" value="Reset">
     </form>
@@ -44,14 +50,23 @@
     </form>
     
     <h2>Book bicycle</h2>
-    <form id="bookBike">
-        <input type="text" id="bike" placeholder="bike's name">
-        <input type="date" id="dateFrom" min=''>
-        <input type="date" id="dateTill" max='']>
-        <input type="submit" value="book">
+    <form id="getBikes">
+        <h3>choose time range to get available bikes</h3>
+        <input type="date" id="dateFrom">
+        from <select id="hourFrom"></select>
+        <br>
+        <input type="date" id="dateTill">
+        till <select id="hourTill"></select>
+        <br>
+        <input type="submit" value="get">
         <input type="reset" value="Reset">
     </form>
-    
+    <div id="bikesList">
+    </div>
+    <div id="myBookings">
+        <h2>Get my bookings<h2>
+        <input type="button" id="getMyBookings" value="get">
+    </div>    
 	<script src="http://localhost:8080/bundle.js"></script>
 </body>
 </html>
