@@ -77,7 +77,7 @@ const getBikesBookings = function(bikeId){
 };
 
 const getBookings = function(bookingId){
-    return query(`SELECT * FROM ${settings.table_bookings} WHERE id = ?`, [bookingId]);
+    return query(`SELECT * FROM ${settings.table_bookings} WHERE id = ?`, [bookingId]).then(single);
 };
 
 const getBookingsByRange = function (rangeFrom, rangeTo){

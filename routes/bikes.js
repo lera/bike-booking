@@ -1,4 +1,5 @@
 var db = require('../database/database');
+var hal = require('../hal');
 
 module.exports = function (req, res) {
     
@@ -6,7 +7,7 @@ module.exports = function (req, res) {
         if (req.params.id){
             return db.getBike(req.params.id)
                 .then(function (data) {
-                    res.send(data);
+                    res.send(hal.bike(data));
                 })
                 .fail(function (error) {
                     if (error.type === 'not_found') {
@@ -19,7 +20,7 @@ module.exports = function (req, res) {
         }
         db.getBikes()
             .then(function (data) {
-                res.send(data);
+                res.send(hal.list(req.url, 'bike', data));
             })
             .fail(function (error) {
                 res.status(500);
@@ -29,7 +30,7 @@ module.exports = function (req, res) {
         return db.postBike(req.user_id, req.body.name)
             .then(function (data) {
                 res.send({ 
-                    text: 'succes'
+                    text: 'success'
                 });
             })
             .fail(function (error) {

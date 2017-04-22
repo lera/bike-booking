@@ -219,18 +219,21 @@ getMyBookings.addEventListener('click', function(event){
         .end(function(err, res){
 console.log(err, res);  
             res.body.map(item => {
-                var booking = document.createElement('p'); 
-                var button = document.createElement('input');
-                button.type = 'button';
-                button.value = 'delete';
-                booking.innerHTML = 'booking id: ' + item.id;
-                myBookings.appendChild(booking);
-                myBookings.appendChild(button);
-                deleteBooking (button, item.id, booking);
+                var bookingID = document.createElement('input'); 
+                var buttonDelete = document.createElement('input');
+                var buttonChange = document.createElement('input');
+                buttonDelete.type = 'button';
+                buttonDelete.value = 'delete';
+                bookingID.value = 'booking id: ' + item.id;
+                bookingID.disabled = true;
+                myBookings.appendChild(bookingID);
+                myBookings.appendChild(buttonDelete);
+                deleteBooking (buttonDelete, item.id, bookingID);
             })      
         });
 });
 
+// delete booking
 function deleteBooking (element, bookingID, text) {
     element.addEventListener('click', function(event){
         event.preventDefault();
@@ -247,4 +250,8 @@ console.log(err, res);
             });
     })
 }
+
+// change booking
+
+
 

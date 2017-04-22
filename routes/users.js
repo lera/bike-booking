@@ -1,4 +1,5 @@
 var db = require('../database/database');
+var hal = require('../hal');
 
 module.exports = function (req, res) {
 
@@ -7,7 +8,7 @@ console.log('USER_ID', req.user_id);
     if (req.params.id && req.method === 'GET') {
         return db.getUser(req.params.id)
             .then(function (data) {
-                res.send(data);
+                res.send(hal.user(data));
             })
             .fail(function (error) {
                 if (error.type === 'not_found') {
